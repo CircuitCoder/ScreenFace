@@ -10,6 +10,11 @@ import javax.swing.JFrame;
 
 public class ScreenFace {
 	private class DragListener extends MouseAdapter implements MouseMotionListener {
+		public DragListener(JFrame f) {
+			this.f=f;
+		}
+		
+		JFrame f;
 		Point ori;
 		Point oriWin;
 		
@@ -61,7 +66,7 @@ public class ScreenFace {
 		tp.setBounds(0,0,400,200);
 		f.add(tp);
 		
-		DragListener dl=new DragListener();
+		DragListener dl=new DragListener(f);
 		f.addMouseMotionListener(dl);
 		f.addMouseListener(dl);
 		f.setSize(400,200);
