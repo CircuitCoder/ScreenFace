@@ -153,7 +153,7 @@ public class ScreenFace {
 		while(true) {
 			String title=sc.next();
 			String body=sc.next();
-			np.addMessage(title, body);
+			np.addMessage(title.replaceAll("-"," "),body.replaceAll("-"," "));
 		}
 	}
 	public void toggleOpt() {

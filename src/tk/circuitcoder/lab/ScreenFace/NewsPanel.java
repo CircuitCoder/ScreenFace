@@ -1,43 +1,69 @@
 package tk.circuitcoder.lab.ScreenFace;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
 import javax.swing.JLabel;
 
 public class NewsPanel extends Panel{
-	private static final Font tfont = new Font(null,Font.BOLD,36);
-	private static FontMetrics tfontM;
-
+	public static class FadeLable extends JLabel {
+		private static final long serialVersionUID = 1L;
+		float alpha;
+		public FadeLable() {
+			alpha=1;
+		}
+		
+		public void setAlpha(float newA) {
+			alpha=newA;
+		}
+		
+		@Override
+		public void paint(Graphics g) {
+			if(g instanceof Graphics2D) {
+				Graphics2D g2d=(Graphics2D) g;
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
+				super.paint(g2d);
+			}
+			else {
+				super.paint(g);
+			}
+		}
+	}
+	
 	private static final long serialVersionUID = 1L;
+	
+	private static Font tfont = new Font(null,Font.BOLD,36);
 	
 	private Font titleFont;
 	private Font bodyFont;
 	private double delta;
 	private double rs;
-	ArrayList<JLabel> rows=new ArrayList<JLabel>();
+	ArrayList<FadeLable> rows=new ArrayList<FadeLable>();
 	
 	public NewsPanel(double rollSpeed) {
 		this.setLayout(null);
 		titleFont=new Font(null,Font.BOLD,24);
-		bodyFont=new Font(null,Font.PLAIN,12);
+		bodyFont=new Font(null,Font.PLAIN,18);
 		delta=-1;
 		rs=rollSpeed;
-		if(tfontM==null) tfontM=this.getFontMetrics(tfont);
 	}
 	
 	public void addMessage(String title,String body) {
-		JLabel t=new JLabel();
+		FadeLable t=new FadeLable();
 		t.setSize(this.getWidth()-2*ow-40,0);
 		t.setFont(titleFont);
+		t.setForeground(Color.WHITE);
 		format(t,title,5);
 		
-		JLabel b=new JLabel();
+		FadeLable b=new FadeLable();
 		b.setFont(bodyFont);
+		b.setForeground(Color.WHITE);
 		b.setSize(this.getWidth()-2*ow-40,0);
 		format(b,body,15);
 		
@@ -93,19 +119,16 @@ public class NewsPanel extends Panel{
 		
 		if(rows.size()==0) return;
 		int x=(int) (ow+60-delta);
-		ListIterator<JLabel> i=rows.listIterator(rows.size());
+		ListIterator<FadeLable> i=rows.listIterator(rows.size());
 		while(x<=this.getHeight()-2*ow-120&&i.hasPrevious()) {
-			JLabel l=i.previous();
+			FadeLable l=i.previous();
 			if(x+l.getHeight()<ow+60) {
-				l.setForeground(new Color(1,1,1,0));
-				System.out.println("Hid");
+				l.setAlpha(0);
 			}
 			else if(x<ow+60) {
-				l.setForeground(new Color(1,1,1,((float)x+l.getHeight()-ow-60)/l.getHeight()));
-				System.out.println("Trans");
+				l.setAlpha(((float)x+l.getHeight()-ow-60)/l.getHeight());
 			} else {
-				l.setForeground(new Color(1,1,1,0F));
-				System.out.println("Shown");
+				l.setAlpha(1);
 			}
 			l.paint(g.create(ow+20,x,l.getWidth(),l.getHeight()));
 			x+=l.getHeight();
