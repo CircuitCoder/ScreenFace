@@ -12,10 +12,10 @@ import java.util.ListIterator;
 import javax.swing.JLabel;
 
 public class NewsPanel extends Panel{
-	public static class FadeLable extends JLabel {
+	public static class FadeLabel extends JLabel {
 		private static final long serialVersionUID = 1L;
 		float alpha;
-		public FadeLable() {
+		public FadeLabel() {
 			alpha=1;
 		}
 		
@@ -44,7 +44,7 @@ public class NewsPanel extends Panel{
 	private Font bodyFont;
 	private double delta;
 	private double rs;
-	ArrayList<FadeLable> rows=new ArrayList<FadeLable>();
+	ArrayList<FadeLabel> rows=new ArrayList<FadeLabel>();
 	
 	public NewsPanel(double rollSpeed) {
 		this.setLayout(null);
@@ -55,13 +55,13 @@ public class NewsPanel extends Panel{
 	}
 	
 	public void addMessage(String title,String body) {
-		FadeLable t=new FadeLable();
+		FadeLabel t=new FadeLabel();
 		t.setSize(this.getWidth()-2*ow-40,0);
 		t.setFont(titleFont);
 		t.setForeground(Color.WHITE);
 		format(t,title,5);
 		
-		FadeLable b=new FadeLable();
+		FadeLabel b=new FadeLabel();
 		b.setFont(bodyFont);
 		b.setForeground(Color.WHITE);
 		b.setSize(this.getWidth()-2*ow-40,0);
@@ -119,9 +119,9 @@ public class NewsPanel extends Panel{
 		
 		if(rows.size()==0) return;
 		int x=(int) (ow+60-delta);
-		ListIterator<FadeLable> i=rows.listIterator(rows.size());
+		ListIterator<FadeLabel> i=rows.listIterator(rows.size());
 		while(x<=this.getHeight()-2*ow-120&&i.hasPrevious()) {
-			FadeLable l=i.previous();
+			FadeLabel l=i.previous();
 			if(x+l.getHeight()<ow+60) {
 				l.setAlpha(0);
 			}
