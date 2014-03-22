@@ -16,15 +16,10 @@ public class TimePanel extends Panel{
 	}
 	
 	public TimePanel(String dateF,String timeF) {
-		this(dateF,timeF,50,10);
-	}
-	
-	public TimePanel(String dateF,String timeF,int c,int w) {
-		super(c,w);
 		df=new SimpleDateFormat(dateF);
 		tf=new SimpleDateFormat(timeF);
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
