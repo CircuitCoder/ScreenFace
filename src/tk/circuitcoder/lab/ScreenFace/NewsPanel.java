@@ -12,16 +12,19 @@ import java.util.ListIterator;
 import javax.swing.JLabel;
 
 public class NewsPanel extends Panel{
-	public static class FadeLabel extends JLabel {
+	private static class FadeLabel extends JLabel {
 		private static final long serialVersionUID = 1L;
 		float alpha;
-		public FadeLabel() {
+		int b;
+		public FadeLabel(int blh) {
 			alpha=1;
+			b=blh;
 		}
 		
 		public void setAlpha(float newA) {
 			alpha=newA;
 		}
+		
 		
 		@Override
 		public void paint(Graphics g) {
@@ -29,6 +32,8 @@ public class NewsPanel extends Panel{
 				Graphics2D g2d=(Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
 				super.paint(g2d);
+				g.setColor(new Color(1,1,1,0.5F));
+				g.fillRect(this.getX(),this.getY()+this.getHeight()-b,this.getWidth(),b);
 			}
 			else {
 				super.paint(g);
@@ -55,13 +60,13 @@ public class NewsPanel extends Panel{
 	}
 	
 	public void addMessage(String title,String body) {
-		FadeLabel t=new FadeLabel();
+		FadeLabel t=new FadeLabel(1);
 		t.setSize(this.getWidth()-2*ow-40,0);
 		t.setFont(titleFont);
 		t.setForeground(Color.WHITE);
-		format(t,title,5);
+		format(t,title,0);
 		
-		FadeLabel b=new FadeLabel();
+		FadeLabel b=new FadeLabel(0);
 		b.setFont(bodyFont);
 		b.setForeground(Color.WHITE);
 		b.setSize(this.getWidth()-2*ow-40,0);
@@ -101,12 +106,13 @@ public class NewsPanel extends Panel{
 	    
 	    builder.append("</html>");
 	    l.setText(builder.toString());
+	    l.setVerticalAlignment(JLabel.TOP);
 	    l.setSize(l.getWidth(),fontMetrics.getHeight()*lineNumber+bottom_margin);
 	}
 	
 	@Override
 	public void paint(Graphics g) {
-		if(delta>0) delta-=rs;
+		if(delta>0) delta-=(Math.log10(delta)*1.5-0.5)*rs;
 		if(delta<0) delta=0;
 		
 		super.paint(g);
@@ -116,6 +122,7 @@ public class NewsPanel extends Panel{
 		g.drawString("News",ow+18,ow+38);
 		g.setColor(Color.WHITE);
 		g.drawString("News",ow+20,ow+40);
+		g.fillRect(ow+20, ow+55,250,5);
 		
 		if(rows.size()==0) return;
 		int x=(int) (ow+60-delta);
