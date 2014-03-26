@@ -132,6 +132,8 @@ public class ScreenFace {
 		nf.setAlwaysOnTop(true);
 		nf.setVisible(true);
 		
+		WeatherPanel wp=new WeatherPanel("5j1znBVAsnSf5xQyNQyq",null);
+		
 		Thread looper=new Thread(new Runnable() {
 			@Override
 			public void run() {
